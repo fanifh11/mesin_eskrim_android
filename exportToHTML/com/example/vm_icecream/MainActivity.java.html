@@ -1,0 +1,404 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #808080; font-style: italic;}
+.s4 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.example.vm_icecream;
+
+<span class="s0">import </span>androidx.annotation.Nullable;
+<span class="s0">import </span>androidx.appcompat.app.ActionBarDrawerToggle;
+<span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<span class="s0">import </span>androidx.fragment.app.FragmentActivity;
+
+<span class="s0">import </span>android.content.Intent;
+<span class="s0">import </span>android.content.IntentFilter;
+<span class="s0">import </span>android.content.RestrictionEntry;
+<span class="s0">import </span>android.os.Bundle;
+<span class="s0">import </span>android.view.View;
+<span class="s0">import </span>android.widget.Button;
+<span class="s0">import </span>android.widget.CompoundButton;
+<span class="s0">import </span>android.widget.RadioButton;
+<span class="s0">import </span>android.widget.RadioGroup;
+<span class="s0">import </span>android.widget.TextView;
+<span class="s0">import </span>android.widget.Toast;
+
+<span class="s0">import </span>com.google.android.material.textfield.TextInputEditText;
+
+<span class="s0">public class </span>MainActivity <span class="s0">extends </span>AppCompatActivity {
+
+    RadioButton radCoklat,radVanilla,radStroberi,radMilo,radMatcha,radCoco,radKacang,radOreo;
+    RadioGroup radGrup_rasa;
+
+    Button btnProses, btnLimaribu , btnSepuluhribu;
+    TextView txtHasil, txtKembalian, txtTotal, txtTampilkanUang;
+
+    <span class="s0">int </span>total = <span class="s2">0</span>;
+    <span class="s0">int </span>eskrimA = <span class="s2">5000</span>; <span class="s3">// harga original (semua rasa) tanpa topping</span>
+    <span class="s0">int </span>eskrimB = <span class="s2">10000</span>; <span class="s3">// harga original dengan topping (semua rasa dan topping )</span>
+
+
+    String rasaCoklat =<span class="s4">&quot;Coklat&quot;</span>;
+    String rasaVanilla = <span class="s4">&quot;Vanilla&quot;</span>;
+    String rasaStroberi = <span class="s4">&quot;Stroberi&quot;</span>;
+    String topCoco = <span class="s4">&quot;Coco Crunch&quot;</span>;
+    String topMilo = <span class="s4">&quot;Milo&quot;</span>;
+    String topMatcha = <span class="s4">&quot;Matcha&quot;</span>;
+    String topKacang = <span class="s4">&quot;Kacang&quot;</span>;
+    String topOreo = <span class="s4">&quot;Oreo&quot;</span>;
+
+    @Override
+    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+        <span class="s0">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        init();
+    }
+
+    <span class="s0">private void </span>init() {
+        radCoklat = findViewById(R.id.radCoklat);
+        radStroberi = findViewById(R.id.radStroberi);
+        radVanilla = findViewById(R.id.radVanilla);
+        radMilo = findViewById(R.id.radMilo);
+        radMatcha = findViewById(R.id.radMatcha);
+        radCoco = findViewById(R.id.radCoco);
+        radKacang = findViewById(R.id.radKacang);
+        radOreo = findViewById(R.id.radOreo);
+
+        btnProses = findViewById(R.id.btnProses);
+        btnLimaribu = findViewById(R.id.btnLimaribu);
+        btnSepuluhribu= findViewById(R.id.btnSepuluhribu);
+
+        txtHasil = findViewById(R.id.txtHasil);
+        txtTotal = findViewById(R.id.txtTotal);
+        txtTampilkanUang = findViewById(R.id.txtTampilkanUang);
+
+        txtKembalian = findViewById(R.id.txtKembalian);
+    }
+
+    <span class="s0">public void </span>coklatOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Anda memilih rasa Cokelat&quot;</span>, Toast.LENGTH_SHORT).show();
+
+
+        <span class="s3">//Jika terjadi perpindahan ke rasa cokelat maka untuk semua pilihan topping akan direset</span>
+        <span class="s0">if </span>(radCoklat.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimA;
+
+        radCoklat.setClickable(<span class="s0">true</span>); <span class="s3">//Agar tidak terjadi penambahan harga ketika di klik terus menerus</span>
+        txtTotal.setText(<span class="s4">&quot;Rp.&quot; </span>+ Integer.toString(total));
+    }
+
+    <span class="s0">public void </span>vanOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Anda memilih rasa Vanilla&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s3">//Jika terjadi perpindahan ke rasa vanilla maka untuk semua pilihan topping akan direset</span>
+        <span class="s0">if </span>(radVanilla.isSelected()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+        total = eskrimA;
+        radVanilla.setClickable(<span class="s0">true</span>); <span class="s3">//Agar tidak terjadi penambahan harga ketika di klik terus menerus</span>
+        txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+    }
+
+    <span class="s0">public void </span>stroOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Anda memilih rasa Stroberi&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s3">//Jika terjadi perpindahan ke rasa stroberi maka untuk semua pilihan topping akan direset</span>
+        <span class="s0">if </span>(radStroberi.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+        total = eskrimB;
+        radStroberi.setClickable(<span class="s0">true</span>); <span class="s3">//Agar tidak terjadi penambahan harga ketika di klik terus menerus</span>
+        txtTotal.setText(<span class="s4">&quot;Rp.&quot; </span>+ Integer.toString(total));
+    }
+
+    <span class="s0">public void </span>miloOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Topping Milo Dipilih&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s3">//Agar yang tercek hanya milo saja</span>
+        <span class="s0">if </span>(radMilo.isChecked()){
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimB;
+
+        <span class="s3">//Proses seleksi pengkategorian es krim tipe B (yaitu dengan topping) dimana Milo dengan es krim rasa Coklat | Vanilla | Stroberi</span>
+        <span class="s0">if </span>(radMilo.isChecked() &amp;&amp; (radCoklat.isChecked()|| radVanilla.isChecked() || radStroberi.isChecked() )){
+            txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+        }
+    }
+
+    <span class="s0">public void </span>matOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Topping Matcha Dipilih&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s0">if </span>(radMatcha.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimB;
+
+        <span class="s3">//Proses seleksi pengkategorian es krim tipe B (yaitu dengan topping) dimana Matcha dengan es krim rasa Coklat | Vanilla | Stroberi</span>
+        <span class="s0">if </span>(radMatcha.isChecked() &amp;&amp; (radCoklat.isChecked()|| radVanilla.isChecked() || radStroberi.isChecked() )){
+            txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+        }
+
+    }
+
+    <span class="s0">public void </span>cocoOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Topping Coco Crunch Dipilih&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s0">if </span>(radCoco.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimB;
+
+        <span class="s3">//Proses seleksi pengkategorian es krim tipe B (yaitu dengan topping) dimana Coco Crunch dengan es krim rasa Coklat | Vanilla | Stroberi</span>
+        <span class="s0">if </span>(radCoco.isChecked() &amp;&amp; (radCoklat.isChecked()|| radVanilla.isChecked() || radStroberi.isChecked() )){
+            txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+        }
+    }
+
+    <span class="s0">public void </span>kacangOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Topping Kacang Dipilih&quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s0">if </span>(radKacang.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+            radOreo.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimB;
+
+        <span class="s3">//Proses seleksi pengkategorian es krim tipe B (yaitu dengan topping) dimana Kacang dengan es krim rasa Coklat | Vanilla | Stroberi</span>
+        <span class="s0">if </span>(radKacang.isChecked() &amp;&amp; (radCoklat.isChecked()|| radVanilla.isChecked() || radStroberi.isChecked() )){
+            txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+        }
+
+    }
+
+    <span class="s0">public void </span>oreoOnClick(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Topping Oreo Dipilih &quot;</span>, Toast.LENGTH_SHORT).show();
+
+        <span class="s0">if </span>(radOreo.isChecked()){
+            radMilo.setChecked(<span class="s0">false</span>);
+            radMatcha.setChecked(<span class="s0">false</span>);
+            radKacang.setChecked(<span class="s0">false</span>);
+            radCoco.setChecked(<span class="s0">false</span>);
+        }
+
+        total = eskrimB;
+
+        <span class="s3">//Proses seleksi pengkategorian es krim tipe B (yaitu dengan topping) dimana Oreo dengan es krim rasa Coklat | Vanilla | Stroberi</span>
+        <span class="s0">if </span>(radOreo.isChecked() &amp;&amp; (radCoklat.isChecked()|| radVanilla.isChecked() || radStroberi.isChecked() )){
+            txtTotal.setText(<span class="s4">&quot;Rp. &quot; </span>+ Integer.toString(total));
+        }
+    }
+
+    <span class="s0">public void </span>buat (View view) {
+        <span class="s0">if </span>(txtTampilkanUang.getText().toString().isEmpty()){
+            Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Uang Masih Kosong&quot;</span>, Toast.LENGTH_SHORT).show();
+        } <span class="s0">else </span>{
+            <span class="s0">if </span>(radCoklat.isChecked()) {
+                <span class="s0">if </span>(radCoklat.isChecked() &amp;&amp; radMilo.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa coklat topping milo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topMilo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radCoklat.isChecked() &amp;&amp; radMatcha.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa coklat topping matcha diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topMatcha + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radCoklat.isChecked() &amp;&amp; radCoco.isChecked()) {
+                    message(<span class="s4">&quot;Es krim rasa coklat topping coco crunch diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topCoco + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radCoklat.isChecked() &amp;&amp; radKacang.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa coklat topping kacang diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topKacang + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radCoklat.isChecked()&amp;&amp;radOreo.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa coklat topping oreo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topOreo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else </span>{
+                    message(<span class="s4">&quot;Es krim rasa coklat diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; sudah siap &quot;</span>);
+                }
+            } <span class="s0">else if </span>(radVanilla.isChecked()){
+                <span class="s0">if </span>(radVanilla.isChecked() &amp;&amp; radMilo.isChecked()){
+                    message (<span class="s4">&quot;Es krim rasa vanilla topping milo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaVanilla + <span class="s4">&quot; topping &quot; </span>+ topMilo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radVanilla.isChecked() &amp;&amp; radMatcha.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa vanilla topping matcha diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaVanilla + <span class="s4">&quot; topping &quot; </span>+ topMatcha + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radVanilla.isChecked() &amp;&amp; radCoco.isChecked()) {
+                    message(<span class="s4">&quot;Es krim rasa vanilla topping coco crunch diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaVanilla + <span class="s4">&quot; topping &quot; </span>+ topCoco + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radVanilla.isChecked() &amp;&amp; radKacang.isChecked()){
+                    message(<span class="s4">&quot;Es krim vanilla topping kacang diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaVanilla + <span class="s4">&quot; topping &quot; </span>+ topKacang + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radVanilla.isChecked()&amp;&amp; radOreo.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa vanilla topping oreo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaCoklat + <span class="s4">&quot; topping &quot; </span>+ topOreo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else </span>{
+                    Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Es krim vanilla diproses&quot;</span>, Toast.LENGTH_SHORT).show();
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaVanilla + <span class="s4">&quot; sudah siap &quot;</span>);
+                }
+            } <span class="s0">else if </span>(radStroberi.isChecked()){
+                <span class="s0">if </span>(radStroberi.isChecked() &amp;&amp; radMilo.isChecked()){
+                    message (<span class="s4">&quot;Es krim rasa stroberi topping milo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; topping &quot; </span>+ topMilo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radStroberi.isChecked() &amp;&amp; radMatcha.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa stroberi topping matcha diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; topping &quot; </span>+ topMatcha + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radStroberi.isChecked() &amp;&amp; radCoco.isChecked()) {
+                    message(<span class="s4">&quot;Es krim rasa stroberi topping coco crunch diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; topping &quot; </span>+ topCoco + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radStroberi.isChecked() &amp;&amp; radKacang.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa stroberi topping kacang diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; topping &quot; </span>+ topKacang + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else if </span>(radStroberi.isChecked()&amp;&amp;radOreo.isChecked()){
+                    message(<span class="s4">&quot;Es krim rasa stroberi topping oreo diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; topping &quot; </span>+ topOreo + <span class="s4">&quot; sudah siap &quot;</span>);
+                } <span class="s0">else </span>{
+                    message(<span class="s4">&quot;Es krim rasa stroberi diproses&quot;</span>);
+                    txtTampilkanUang.setText(<span class="s4">&quot;&quot;</span>);
+                    txtHasil.setText(<span class="s4">&quot;Es krim rasa &quot; </span>+ rasaStroberi + <span class="s4">&quot; sudah siap &quot;</span>);
+                }
+            }
+        }
+    }
+
+    <span class="s0">private void </span>message( String message_proses) {
+        Toast.makeText(<span class="s0">this</span>, message_proses, Toast.LENGTH_LONG).show();
+    }
+
+    <span class="s0">private void </span>alert(String message_error) {
+        Toast.makeText(<span class="s0">this</span>, message_error, Toast.LENGTH_SHORT).show();
+    }
+
+
+    <span class="s0">public void </span>btnSepuluhribuOnClick(View view) {
+        txtTampilkanUang.setText(<span class="s4">&quot;Uang Anda Rp. 10000&quot;</span>);
+        <span class="s0">if </span>(total == <span class="s2">10000</span>) {
+                btnProses.setClickable(<span class="s0">true</span>);
+                txtKembalian.setText(<span class="s4">&quot;Uang anda sudah pas&quot;</span>);
+
+
+        } <span class="s0">else </span>{
+            <span class="s3">// Jika ada yang memesan es krim dengan harga 5000</span>
+                btnProses.setClickable(<span class="s0">true</span>);
+                <span class="s0">int </span>kembalian = <span class="s2">0</span>;
+                kembalian = <span class="s2">10000 </span>- total;
+                txtKembalian.setText(<span class="s4">&quot;Kembalian Anda&quot; </span>+ <span class="s4">&quot; Rp &quot; </span>+ kembalian);
+        }
+    }
+
+
+    <span class="s0">public void </span>btnLimaribuOnClick(View view) {
+        txtTampilkanUang.setText(<span class="s4">&quot;Uang Anda Rp. 5000 &quot;</span>);
+        <span class="s0">if </span>(total &gt; <span class="s2">5000</span>){
+            Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Uang anda kurang. Silahkan ambil uang anda di tempat kembalian dan masukkan kembali seusai dengan harga&quot;</span>,
+                        Toast.LENGTH_LONG).show();
+            txtTampilkanUang.setText(<span class="s4">&quot;Uang Anda Kurang&quot;</span>);
+            btnProses.setClickable(<span class="s0">false</span>);
+
+            <span class="s3">//Uang pengguna akan keluar</span>
+            txtKembalian.setText(<span class="s4">&quot;Rp. 5000&quot;</span>);
+        } <span class="s0">else if </span>(total == <span class="s2">5000</span>) {
+            btnProses.setClickable(<span class="s0">true</span>);
+            txtKembalian.setText(<span class="s4">&quot;Uang anda sudah pas&quot;</span>);
+        }
+
+
+    }
+
+    <span class="s0">public void </span>ambilUang(View view) {
+        txtKembalian.setText(<span class="s4">&quot; &quot;</span>);
+    }
+
+    <span class="s0">public void </span>ambilEskrim(View view) {
+        txtHasil.setText(<span class="s4">&quot; &quot;</span>);
+    }
+
+    <span class="s0">public void </span>konfirmasi(View view) {
+        <span class="s3">//untuk mengunci pilihan dari pengguna</span>
+        radCoklat.setClickable(<span class="s0">false</span>);
+        radVanilla.setClickable(<span class="s0">false</span>);
+        radStroberi.setClickable(<span class="s0">false</span>);
+        radMilo.setClickable(<span class="s0">false</span>);
+        radMatcha.setClickable(<span class="s0">false</span>);
+        radCoco.setClickable(<span class="s0">false</span>);
+        radKacang.setClickable(<span class="s0">false</span>);
+        radOreo.setClickable(<span class="s0">false</span>);
+
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Pilihan anda telah terkonfirmasi&quot;</span>, Toast.LENGTH_SHORT).show();
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Jika ingin membatalkan, tekan tombol batal&quot;</span>, Toast.LENGTH_SHORT).show();
+
+    }
+
+    <span class="s0">public void </span>batal(View view) {
+        Toast.makeText(<span class="s0">this</span>, <span class="s4">&quot;Silahkan memilih lagi&quot;</span>, Toast.LENGTH_SHORT).show();
+        radCoklat.setClickable(<span class="s0">true</span>);
+        radVanilla.setClickable(<span class="s0">true</span>);
+        radStroberi.setClickable(<span class="s0">true</span>);
+        radMilo.setClickable(<span class="s0">true</span>);
+        radMatcha.setClickable(<span class="s0">true</span>);
+        radCoco.setClickable(<span class="s0">true</span>);
+        radKacang.setClickable(<span class="s0">true</span>);
+        radOreo.setClickable(<span class="s0">true</span>);
+
+        txtTotal.setText(<span class="s4">&quot;&quot;</span>);
+    }
+}</pre>
+</body>
+</html>
